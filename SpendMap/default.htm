@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+    <meta charset="utf-8" />
+    <title>TypeScript HTML App</title>
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="Scripts/choosen/chosen.css">
+
+    <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+    <script src="Scripts/choosen/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <link rel="stylesheet" href="app.css" type="text/css" />
+    <script src="Scripts/angular.js"></script>
+    <script src="app/model/Contract.js"></script>
+    <script src="app/Services/SupliersService.js"></script>
+    <script src="app/controllers/ContractsController.js"></script>
+    <script src="app/model/Dictionary.js"></script>
+    <script src="app/controllers/DictionariesController.js"></script>
+    <script src="app/model/AdditionalTypes.js"></script>
+    <script src="app/model/Customer.js"></script>
+    <script src="app/controllers/MapController.js"></script>
+    <script>
+        var chozer = function(parameters) {
+            $("#cznOpfms").chosen();
+            $("#cznSelectedBudgetLevels").chosen();
+            $("#cznSelectedPlacings").chosen();
+            $("#cznRegions").chosen();
+        }
+    </script>
+</head>
+<body>
+    <h1>TypeScript HTML App</h1>
+    <div ng-controller="Contracts.ContractsController">
+        <p>{{contract.id}}</p>
+        <p>{{contract.text}}</p>
+        <input type="button" ng-click="VM.LoadData()" value="contract.LoadData" />
+    </div>
+
+    <div ng-controller="Dictionaries.DictionaryController">
+        <div>
+            <select id="cznSelectedBudgetLevels" style="width:200px" 
+                    data-placeholder="Choose a Recipient" 
+                    class="chzn-select" 
+                    ng-model="SelectedBudgetLevels" 
+                    ng-options="budgetLevel.budgetLevelName for budgetLevel in BudgetLevels"></select>
+
+            <select id="cznSelectedPlacings" style="width:200px"
+                    data-placeholder="Choose a Recipient"
+                    class="chzn-select"
+                    ng-model="SelectedBudgetLevels"
+                    ng-options="placing.description for placing in Placings"></select>
+
+            <select id="cznRegions" style="width:200px"
+                    data-placeholder="Choose a Recipient"
+                    class="chzn-select"
+                    ng-model="SelectedRegions"
+                    ng-options="region.name for region in Regions"></select>
+
+            <select id="cznOpfms" style="width:200px"
+                    data-placeholder="Choose a Recipient"
+                    class="chzn-select"
+                    ng-model="SelectedOpfms"
+                    ng-options="opfm.opf for opfm in Opfms"></select>
+        </div>
+    </div>
+    <div ng-controller="Maps.MapController">
+        <input type="button" ng-click="VM.GetSupliers()" value="VM.GetSupliers" />
+        <p>{{SuplierCount}}</p>
+        <input type="button" ng-click="VM.DisplaySupliers()" value="VM.DisplayCustomers" />
+
+        <div id="map" style="margin: 10px;width:500px; height: 500px;"></div>
+    </div>
+</body>
+</html>
