@@ -5,9 +5,12 @@ module Services {
         private baseUri: string;
         private supliersUri: string;
         private _http: ng.IHttpService;
+        private _supliers: Model.Suplier[];
+        private _map: Maps.MapController;
 
-        constructor(http: ng.IHttpService) {
+        constructor(http: ng.IHttpService, model: Maps.MapController) {
             this._http = http;
+            this._map = model;
             this.header = {
                 method: "GET",
                 headers: {
@@ -15,11 +18,12 @@ module Services {
                     "If-None-Match": "dc68bf7b0e24f6912ffdac1ab707bb52929c8b2a"
                 }
             };
+            this._supliers = [];
             this.baseUri = "https://clearspending.p.mashape.com";
             this.supliersUri = this.baseUri + "/v1/suppliers/select/?regioncode=23";
         }
 
-        public LoadSupliers(model: Model.Suplier[]) {
+        public LoadSupliers() {
             var result: Model.Suplier[];
             result = [];
             var reguest = this._http.get(this.supliersUri, this.header);
@@ -28,17 +32,18 @@ module Services {
                 if (data == "") {
                     return;
                 }
+                this._supliers = [];
                 for (var i = 0; i < data.suppliers.data.length; i++) {
-                    var item = new Model.Suplier();
-                    item.factualAddres = data.opf.data[i].factualAddres;
-                    this.push(item);
+                    var item = { factualAddres: data.suppliers.data[i].factualAddres };
+                    this._supliers.push(item);
                 }
-            }.bind(model));
+                this._map.DisplaySupliers(this._supliers);
+            }.bind(this));
             return result;
         }
     }
 
     angular.module('Services.SuplierService', []).factory('SuplierService', ($http: ng.IHttpService) => {
-        return new SuplierService($http);
+        return new SuplierService($http, null);
     });
 }

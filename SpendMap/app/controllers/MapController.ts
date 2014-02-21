@@ -29,14 +29,14 @@ module Maps {
             testCustomer.postalAddress = "могилев ул. Ленинская 81а";
             this._customers.push(testCustomer);
             this._scope.VM = this;
-            this._supliersService = new Services.SuplierService(this._http);
+            this._supliersService = new Services.SuplierService(this._http, this);
         }
 
         Load(): void {
         }
 
         public GetSupliers(): void {
-            this._supliersService.LoadSupliers(this._supliers);
+            this._supliersService.LoadSupliers();
             this._scope.SuplierCount = this._supliers.length;
         }
 
@@ -59,17 +59,18 @@ module Maps {
             }
         }
 
-        public DisplaySupliers(): void {
+        public DisplaySupliers(model: Model.Suplier[]): void {
+            this._supliers = model;
             for (var i = 0; i < this._supliers.length; i++) {
                 var geocodeRequest: google.maps.GeocoderRequest = {
                     address: this._supliers[i].factualAddres
                 };
                 this._geocode.geocode(
                     geocodeRequest,
-                    function (
-                        results: google.maps.GeocoderResult[],
-                        status: google.maps.GeocoderStatus) {
-                        console.log("DisplayCustomers", this._supliers[i], results, status);
+                    function (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) {
+                        if (results == null || results.length == 0) {
+                            return;
+                        }
                         var marker = new google.maps.Marker();
                         marker.setPosition(results[0].geometry.location);
                         marker.setMap(this._map);

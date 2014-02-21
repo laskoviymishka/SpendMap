@@ -1,8 +1,9 @@
 var Services;
 (function (Services) {
     var SuplierService = (function () {
-        function SuplierService(http) {
+        function SuplierService(http, model) {
             this._http = http;
+            this._map = model;
             this.header = {
                 method: "GET",
                 headers: {
@@ -10,10 +11,11 @@ var Services;
                     "If-None-Match": "dc68bf7b0e24f6912ffdac1ab707bb52929c8b2a"
                 }
             };
+            this._supliers = [];
             this.baseUri = "https://clearspending.p.mashape.com";
             this.supliersUri = this.baseUri + "/v1/suppliers/select/?regioncode=23";
         }
-        SuplierService.prototype.LoadSupliers = function (model) {
+        SuplierService.prototype.LoadSupliers = function () {
             var result;
             result = [];
             var reguest = this._http.get(this.supliersUri, this.header);
@@ -22,12 +24,13 @@ var Services;
                 if (data == "") {
                     return;
                 }
+                this._supliers = [];
                 for (var i = 0; i < data.suppliers.data.length; i++) {
-                    var item = new Model.Suplier();
-                    item.factualAddres = data.opf.data[i].factualAddres;
-                    this.push(item);
+                    var item = { factualAddres: data.suppliers.data[i].factualAddres };
+                    this._supliers.push(item);
                 }
-            }.bind(model));
+                this._map.DisplaySupliers(this._supliers);
+            }.bind(this));
             return result;
         };
         return SuplierService;
@@ -35,7 +38,7 @@ var Services;
     Services.SuplierService = SuplierService;
 
     angular.module('Services.SuplierService', []).factory('SuplierService', function ($http) {
-        return new SuplierService($http);
+        return new SuplierService($http, null);
     });
 })(Services || (Services = {}));
 //# sourceMappingURL=SupliersService.js.map
