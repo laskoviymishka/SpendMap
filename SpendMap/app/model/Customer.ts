@@ -35,8 +35,4 @@ module Model {
         public budgets: Budget[];
         public timeZone: number;
     }
-
-    export class CustomerQuery {
-
-    }
 }

@@ -1,4 +1,4 @@
-var Maps;
+﻿var Maps;
 (function (Maps) {
     var MapScope = (function () {
         function MapScope() {
@@ -13,24 +13,24 @@ var Maps;
             this._scope = $scope;
             var mapOptions = {
                 zoom: 8,
-                center: new google.maps.LatLng(-34.397, 150.644)
+                center: new google.maps.LatLng(55.764213, 37.619505)
             };
             this._map = new google.maps.Map(document.getElementById('map'), mapOptions);
             this._geocode = new google.maps.Geocoder();
             this._customers = [];
             this._supliers = [];
             var testCustomer = new Model.Customer();
-            testCustomer.postalAddress = "могилев ул. Ленинская 81а";
+            testCustomer.postalAddress = "mogilev";
             this._customers.push(testCustomer);
             this._scope.VM = this;
-            this._supliersService = new Services.SuplierService(this._http, this);
+            this._scope.query = "?productsearch=suppliers";
+            this._supliersService = Services.SuplierService.getInstance(this._http);
+            this._supliersService.SetMap(this);
         }
         MapController.prototype.Load = function () {
         };
 
         MapController.prototype.GetSupliers = function () {
-            this._supliersService.LoadSupliers();
-            this._scope.SuplierCount = this._supliers.length;
         };
 
         MapController.prototype.DisplayCustomers = function () {
@@ -50,20 +50,34 @@ var Maps;
 
         MapController.prototype.DisplaySupliers = function (model) {
             this._supliers = model;
-            for (var i = 0; i < this._supliers.length; i++) {
+            console.log("LoadSupliers success", this._supliers);
+            var index = 0;
+            this.GeocodeAndDisplay(index);
+        };
+
+        MapController.prototype.GeocodeAndDisplay = function (index) {
+            var _this = this;
+            var suplier = this._supliers[index];
+            var map = this._map;
+            setTimeout(function () {
                 var geocodeRequest = {
-                    address: this._supliers[i].factualAddres
+                    address: suplier.factualAddres
                 };
-                this._geocode.geocode(geocodeRequest, function (results, status) {
+                _this._geocode.geocode(geocodeRequest, function (results, status) {
+                    console.log("LoadSupliers success", results, status);
+                    if (index <= this._supliers.length) {
+                        this.GeocodeAndDisplay(index + 1);
+                    }
+
                     if (results == null || results.length == 0) {
                         return;
+                    } else {
+                        var marker = new google.maps.Marker();
+                        marker.setMap(this._map);
+                        marker.setPosition(results[0].geometry.location);
                     }
-                    var marker = new google.maps.Marker();
-                    marker.setPosition(results[0].geometry.location);
-                    marker.setMap(this._map);
-                    this._map.setCenter(results[0].geometry.location);
-                }.bind(this));
-            }
+                }.bind(_this));
+            }, 100 + index * 30);
         };
         return MapController;
     })();

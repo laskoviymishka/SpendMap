@@ -1,4 +1,4 @@
-var Dictionaries;
+﻿var Dictionaries;
 (function (Dictionaries) {
     var DictionaryScope = (function () {
         function DictionaryScope() {
@@ -19,6 +19,7 @@ var Dictionaries;
                     "If-None-Match": "dc68bf7b0e24f6912ffdac1ab707bb52929c8b2a"
                 }
             };
+            this._loadCount = 0;
             this.baseUri = "https://clearspending.p.mashape.com";
             this.opfmUri = this.baseUri + "/v1/opf/select/?opf=all";
             this.regionsUri = this.baseUri + "/v1/regions/select/?regioncode=all";
@@ -32,6 +33,9 @@ var Dictionaries;
             this.LoadBudgetLevels();
             this.LoadPlacing();
             this.LoadRegions();
+            this._supliersService = Services.SuplierService.getInstance($http);
+            this._supliersService.SetDictionaries(this);
+            this.scope.totalResult = 0;
         }
         DictionaryController.prototype.LoadOpfm = function () {
             var reguest = this.httpService.get(this.opfmUri, this.header);
@@ -46,6 +50,7 @@ var Dictionaries;
                     item.id = data.opf.data[i].id;
                     this.scope.Opfms.push(item);
                 }
+                this.TryToChozen();
             }.bind(this));
         };
 
@@ -63,6 +68,7 @@ var Dictionaries;
                     item.id = data.placing.data[i].id;
                     this.scope.Placings.push(item);
                 }
+                this.TryToChozen();
             }.bind(this));
         };
 
@@ -83,6 +89,7 @@ var Dictionaries;
                     item.id = data.regions.data[i].id;
                     this.scope.Regions.push(item);
                 }
+                this.TryToChozen();
             }.bind(this));
         };
 
@@ -100,7 +107,33 @@ var Dictionaries;
                     item.id = data.budgetlevels.data[i].id;
                     this.scope.BudgetLevels.push(item);
                 }
+                this.TryToChozen();
             }.bind(this));
+        };
+
+        DictionaryController.prototype.BuildQuery = function () {
+            console.log("BuildQuery", this.scope.cQuery);
+            this._supliersService.LoadSuplierFromQuyery(this.scope.cQuery);
+        };
+
+        DictionaryController.prototype.SetTotalResult = function (totalResult) {
+            this.scope.totalResult = totalResult;
+        };
+
+        DictionaryController.prototype.TryToChozen = function () {
+            this._loadCount++;
+            if (this._loadCount >= 4) {
+                setTimeout(function () {
+                    console.log("TryToChozen success");
+                    var elem;
+                    elem = $("#cznSelectedBudgetLevels");
+                    elem.chosen();
+                    elem = $("#cznSelectedPlacings");
+                    elem.chosen();
+                    elem = $("#cznRegions");
+                    elem.chosen();
+                }, 2000);
+            }
         };
         return DictionaryController;
     })();

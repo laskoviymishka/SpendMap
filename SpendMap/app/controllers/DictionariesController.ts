@@ -2,6 +2,8 @@ module Dictionaries {
 
     export class DictionaryScope {
         VM: DictionaryController;
+        cQuery: Model.ContractQuery;
+        totalResult: number;
         Opfms: Opfm[];
         Regions: Region[];
         Placings: Placing[];
@@ -19,6 +21,8 @@ module Dictionaries {
         private regionsUri: string;
         private placingUri: string;
         private budgetlevelsUri: string;
+        private _supliersService: Services.SuplierService;
+        private _loadCount: number;
 
 
         constructor($scope: DictionaryScope, $http: IHttpService) {
@@ -32,6 +36,7 @@ module Dictionaries {
                     "If-None-Match": "dc68bf7b0e24f6912ffdac1ab707bb52929c8b2a"
                 }
             };
+            this._loadCount = 0;
             this.baseUri = "https://clearspending.p.mashape.com";
             this.opfmUri = this.baseUri + "/v1/opf/select/?opf=all";
             this.regionsUri = this.baseUri + "/v1/regions/select/?regioncode=all";
@@ -45,6 +50,9 @@ module Dictionaries {
             this.LoadBudgetLevels();
             this.LoadPlacing();
             this.LoadRegions();
+            this._supliersService = Services.SuplierService.getInstance($http);
+            this._supliersService.SetDictionaries(this);
+            this.scope.totalResult = 0;
         }
 
         public LoadOpfm() {
@@ -60,6 +68,8 @@ module Dictionaries {
                     item.id = data.opf.data[i].id;
                     this.scope.Opfms.push(item);
                 }
+                this.TryToChozen();
+
             }.bind(this));
         }
 
@@ -77,6 +87,8 @@ module Dictionaries {
                     item.id = data.placing.data[i].id;
                     this.scope.Placings.push(item);
                 }
+                this.TryToChozen();
+
             }.bind(this));
         }
 
@@ -97,6 +109,8 @@ module Dictionaries {
                     item.id = data.regions.data[i].id;
                     this.scope.Regions.push(item);
                 }
+                this.TryToChozen();
+
             }.bind(this));
         }
 
@@ -114,7 +128,33 @@ module Dictionaries {
                     item.id = data.budgetlevels.data[i].id;
                     this.scope.BudgetLevels.push(item);
                 }
+                this.TryToChozen();
             }.bind(this));
+        }
+
+        public BuildQuery() {
+            console.log("BuildQuery", this.scope.cQuery);
+            this._supliersService.LoadSuplierFromQuyery(this.scope.cQuery);
+        }
+
+        public SetTotalResult(totalResult: number) {
+            this.scope.totalResult = totalResult;
+        }
+
+        private TryToChozen() {
+            this._loadCount++;
+            if (this._loadCount >= 4) {
+                setTimeout(() => {
+                    console.log("TryToChozen success");
+                    var elem: any;
+                    elem = $("#cznSelectedBudgetLevels");
+                    elem.chosen();
+                    elem = $("#cznSelectedPlacings");
+                    elem.chosen();
+                    elem = $("#cznRegions");
+                    elem.chosen();
+                }, 2000);
+            }
         }
     }
 }

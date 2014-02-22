@@ -18,7 +18,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="css\semantic.css" />
+    <Content Include="css\semantic.min.css" />
     <Content Include="default.htm" />
+    <Content Include="feed.css" />
+    <Content Include="feed.html" />
+    <Content Include="feed.js" />
+    <Content Include="fonts\basic.icons.svg" />
+    <Content Include="fonts\icons.svg" />
+    <Content Include="images\bg.jpg" />
+    <Content Include="images\cat.png" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-cookies.js" />
@@ -286,6 +295,11 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
+    <Content Include="Scripts\metro-bootstrap.css" />
+    <Content Include="Scripts\metro-calendar.js" />
+    <Content Include="Scripts\metro-core.js" />
+    <Content Include="Scripts\metro-datepicker.js" />
+    <Content Include="Scripts\semantic.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +312,7 @@
     <TypeScriptCompile Include="app\model\Contract.ts" />
     <TypeScriptCompile Include="app\model\Dictionary.ts" />
     <TypeScriptCompile Include="app\model\Product.ts" />
+    <TypeScriptCompile Include="app\model\Query.ts" />
     <TypeScriptCompile Include="app\model\Suplier.ts" />
     <TypeScriptCompile Include="app\repository\IRepository.ts" />
     <TypeScriptCompile Include="app\repository\Repository.ts" />
@@ -325,6 +340,13 @@
     <Content Include="Scripts\angular-cookies.min.js.map" />
     <Content Include="Scripts\angular-animate.min.js.map" />
     <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="fonts\basic.icons.eot" />
+    <Content Include="fonts\basic.icons.ttf" />
+    <Content Include="fonts\basic.icons.woff" />
+    <Content Include="fonts\icons.eot" />
+    <Content Include="fonts\icons.otf" />
+    <Content Include="fonts\icons.ttf" />
+    <Content Include="fonts\icons.woff" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

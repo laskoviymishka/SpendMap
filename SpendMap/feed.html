@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html ng-app>
+<head>
+    <!-- Standard Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <!-- Site Properities -->
+    <title>Поставщики</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Open+Sans:300italic,400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/semantic.css">
+    <link rel="stylesheet" href="Scripts/choosen/chosen.css">
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script src="Scripts/choosen/chosen.jquery.min.js"></script>
+    <link href="Scripts/metro-bootstrap.css" rel="stylesheet" />
+    <script src="Scripts/metro-core.js"></script>
+    <script src="Scripts/metro-datepicker.js"></script>
+    <script src="Scripts/metro-calendar.js"></script>
+    <script src="app/model/Query.js"></script>
+    <script src="scripts/semantic.js"></script>
+    <script src="Scripts/angular.js"></script>
+    <script src="app/model/Contract.js"></script>
+    <script src="app/Services/SupliersService.js"></script>
+    <script src="app/controllers/ContractsController.js"></script>
+    <script src="app/model/Dictionary.js"></script>
+    <script src="app/controllers/DictionariesController.js"></script>
+    <script src="app/model/AdditionalTypes.js"></script>
+    <script src="app/model/Customer.js"></script>
+    <script src="app/controllers/MapController.js"></script>
+    <link rel="stylesheet" type="text/css" href="feed.css">
+    <script src="feed.js"></script>
+</head>
+<body id="feed">
+    <div class="ui large teal vertical sidebar menu" ng-controller="Dictionaries.DictionaryController">
+        <a class="active item">
+            Найдено контрактов <span class="ui label">{{totalResult}}</span>
+        </a>
+        <div class="item">
+            <i class="briefcase icon"></i> Контракт
+            <div class="ui labeled input">
+                <input type="text" placeholder="Номер реестровой записи контракта..." ng-model="cQuery.regnum">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <i class="male icon"></i> Заказчик
+            <div class="ui labeled input">
+                <input type="text" placeholder="Название организации заказчика...">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            <div class="ui labeled input">
+                <input type="text" placeholder="КПП заказчика..." ng-model="cQuery.customerinn">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            <div class="ui labeled input">
+                <input type="text" placeholder="ИНН заказчика..." ng-model="cQuery.customerkpp">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <i class="add icon"></i> Вид продукции
+            <div class="ui labeled input">
+                <input type="text" placeholder="Код продукции по ОКДП..." ng-model="cQuery.okdp">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <i class="money icon"></i> Стоимость контратка, руб
+            <div class="ui labeled input">
+                <input type="text" placeholder="Нижняя граница контракта..." ng-model="cQuery.priceLower">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            <div class="ui labeled input">
+                <input type="text" placeholder="Верхняя граница контракта..." ng-model="cQuery.priceTop">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <i class="money icon"></i> Дата заключения контракта
+            <div class="ui labeled input">
+                <input type="text"
+                       id="datepickerLow"
+                       placeholder="Нижняя граница даты..."
+                       ng-model="cQuery.dateLower">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            <div class="ui labeled input">
+                <input type="text"
+                       id="datepickerTop"
+                       placeholder="Верхняя граница даты..."
+                       ng-model="cQuery.dateTop">
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <i class="add icon"></i>
+            <select id="cznSelectedBudgetLevels" style="width:200px"
+                    data-placeholder="Уровень бюджета"
+                    class="chzn-select"
+                    ng-model="SelectedBudgetLevels"
+                    ng-options="budgetLevel.budgetLevelName for budgetLevel in BudgetLevels"></select>
+        </div>
+        <div class="item">
+            <i class="add icon"></i>
+            <select id="cznSelectedPlacings" style="width:200px"
+                    data-placeholder="Способ размещения"
+                    class="chzn-select"
+                    ng-model="SelectedPlacings"
+                    ng-options="placing.description for placing in Placings"></select>
+        </div>
+        <div class="item">
+            <i class="add icon"></i>
+            <select id="cznRegions" style="width:200px"
+                    data-placeholder="Регион"
+                    class="chzn-select"
+                    ng-model="SelectedRegions"
+                    ng-options="region.name for region in Regions"></select>
+        </div>
+        <a class="item">
+            <div class="ui icon input">
+                <input type="text"
+                       placeholder="Ключевые слова..."
+                       ng-model="cQuery.productsearch">
+                <i class="inverted purple search icon" ng-click="VM.BuildQuery()"></i>
+            </div>
+        </a>
+    </div>
+    <div class="ui celled grid" style="height: 100%">
+        <div class="sixteen wide middle column" ng-controller="Maps.MapController" style="width: 100%; height: 100%">
+            <div class="ui left floated purple  launch button">
+                <i class="list layout icon"></i> Критерии
+            </div>
+            <div id="map" style="width: 100%; height: 95%"></div>
+        </div>
+    </div>
+</body>
+</html>

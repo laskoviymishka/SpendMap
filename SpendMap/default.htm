@@ -39,31 +39,24 @@
     <div ng-controller="Dictionaries.DictionaryController">
         <div>
             <select id="cznSelectedBudgetLevels" style="width:200px" 
-                    data-placeholder="Choose a Recipient" 
-                    class="chzn-select" 
                     ng-model="SelectedBudgetLevels" 
                     ng-options="budgetLevel.budgetLevelName for budgetLevel in BudgetLevels"></select>
 
             <select id="cznSelectedPlacings" style="width:200px"
-                    data-placeholder="Choose a Recipient"
-                    class="chzn-select"
-                    ng-model="SelectedBudgetLevels"
+                    ng-model="SelectedPlacings"
                     ng-options="placing.description for placing in Placings"></select>
 
             <select id="cznRegions" style="width:200px"
-                    data-placeholder="Choose a Recipient"
-                    class="chzn-select"
                     ng-model="SelectedRegions"
                     ng-options="region.name for region in Regions"></select>
 
             <select id="cznOpfms" style="width:200px"
-                    data-placeholder="Choose a Recipient"
-                    class="chzn-select"
                     ng-model="SelectedOpfms"
                     ng-options="opfm.opf for opfm in Opfms"></select>
         </div>
     </div>
     <div ng-controller="Maps.MapController">
+        <input ng-model="query"/>
         <input type="button" ng-click="VM.GetSupliers()" value="VM.GetSupliers" />
         <p>{{SuplierCount}}</p>
         <input type="button" ng-click="VM.DisplaySupliers()" value="VM.DisplayCustomers" />
