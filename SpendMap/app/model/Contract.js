@@ -1,15 +1,10 @@
-var Contracts;
-(function (Contracts) {
+var Model;
+(function (Model) {
     var Contract = (function () {
-        function Contract(request, http) {
-            this._request = request;
-            this._http = http;
+        function Contract() {
         }
-        Contract.prototype.SuccessCallback = function (data) {
-            this.text = data.toString();
-        };
         return Contract;
     })();
-    Contracts.Contract = Contract;
-})(Contracts || (Contracts = {}));
+    Model.Contract = Contract;
+})(Model || (Model = {}));
 //# sourceMappingURL=Contract.js.map

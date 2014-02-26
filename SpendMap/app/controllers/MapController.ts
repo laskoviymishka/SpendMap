@@ -4,6 +4,7 @@ module Maps {
         VM: MapController;
         query: string;
         SuplierCount: number;
+        proccessedItems: number;
     }
 
     export class MapController {
@@ -55,6 +56,7 @@ module Maps {
                         var marker = new google.maps.Marker();
                         marker.setPosition(results[0].geometry.location);
                         marker.setMap(this._map);
+                        marker.addListener(marker, "click", () => { console.log("asdasdasd") });
                         this._map.setCenter(results[0].geometry.location);
                     }.bind(this));
             }
@@ -67,10 +69,25 @@ module Maps {
             this.GeocodeAndDisplay(index);
         }
 
+        public MapRegion(region: Dictionaries.Region) {
+            var geocodeRequest: google.maps.GeocoderRequest = {
+                address: region.name
+            };
+            console.log("geocodeRequest", geocodeRequest);
+            this._geocode.geocode(
+                geocodeRequest,
+                function (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) {
+                    console.log("geocodeRequest response", results, status, region);
+                    this._map.setCenter(results[0].geometry.location);
+                }.bind(this));
+        }
 
         private GeocodeAndDisplay(index: number) {
             var suplier = this._supliers[index];
-            var map = this._map;
+            var timeOut = 100 + index * 50;
+            if (timeOut > 600) {
+                timeOut = 600;
+            }
             setTimeout(() => {
                 var geocodeRequest: google.maps.GeocoderRequest = {
                     address: suplier.factualAddres
@@ -91,7 +108,8 @@ module Maps {
                             marker.setPosition(results[0].geometry.location);
                         }
                     }.bind(this));
-            }, 100 + index * 30);
+            }, timeOut);
+            this._supliersService.UpdateDisplayProgress(index);
         }
     }
 } 

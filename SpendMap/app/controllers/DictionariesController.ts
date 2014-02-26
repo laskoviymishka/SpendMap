@@ -1,14 +1,17 @@
 module Dictionaries {
 
-    export class DictionaryScope {
+    export interface DictionaryScope extends ng.IScope {
         VM: DictionaryController;
         cQuery: Model.ContractQuery;
         totalResult: number;
+        processedProgress: number;
+        progress: number;
         Opfms: Opfm[];
         Regions: Region[];
         Placings: Placing[];
         BudgetLevels: BudgetLevel[];
         SelectedBudgetLevels: BudgetLevel[];
+        SelectedRegion: Dictionaries.Region;
     }
 
     export class DictionaryController {
@@ -53,6 +56,7 @@ module Dictionaries {
             this._supliersService = Services.SuplierService.getInstance($http);
             this._supliersService.SetDictionaries(this);
             this.scope.totalResult = 0;
+            this.scope.progress = 0;
         }
 
         public LoadOpfm() {
@@ -134,11 +138,23 @@ module Dictionaries {
 
         public BuildQuery() {
             console.log("BuildQuery", this.scope.cQuery);
+            if (this.scope.SelectedRegion != null) {
+                this.scope.cQuery.customerregion = this.scope.SelectedRegion.subjectCode.toString();
+                this._supliersService.MapRegion(this.scope.SelectedRegion);
+            }
+            this.scope.processedProgress = 0;
+            this.scope.progress = 0;
             this._supliersService.LoadSuplierFromQuyery(this.scope.cQuery);
         }
 
         public SetTotalResult(totalResult: number) {
             this.scope.totalResult = totalResult;
+        }
+
+        public UpdateProgress(currentItem: number) {
+            this.scope.processedProgress = currentItem;
+            this.scope.progress = (this.scope.processedProgress / this.scope.totalResult) * 100;
+            this.scope.$apply();
         }
 
         private TryToChozen() {
@@ -153,7 +169,7 @@ module Dictionaries {
                     elem.chosen();
                     elem = $("#cznRegions");
                     elem.chosen();
-                }, 2000);
+                }, 1500);
             }
         }
     }

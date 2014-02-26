@@ -1,4 +1,4 @@
-var Model;
+﻿var Model;
 (function (Model) {
     var Suplier = (function () {
         function Suplier() {

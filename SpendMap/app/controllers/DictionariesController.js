@@ -1,12 +1,5 @@
-﻿var Dictionaries;
+var Dictionaries;
 (function (Dictionaries) {
-    var DictionaryScope = (function () {
-        function DictionaryScope() {
-        }
-        return DictionaryScope;
-    })();
-    Dictionaries.DictionaryScope = DictionaryScope;
-
     var DictionaryController = (function () {
         function DictionaryController($scope, $http) {
             this.httpService = $http;
@@ -36,6 +29,7 @@
             this._supliersService = Services.SuplierService.getInstance($http);
             this._supliersService.SetDictionaries(this);
             this.scope.totalResult = 0;
+            this.scope.progress = 0;
         }
         DictionaryController.prototype.LoadOpfm = function () {
             var reguest = this.httpService.get(this.opfmUri, this.header);
@@ -113,11 +107,23 @@
 
         DictionaryController.prototype.BuildQuery = function () {
             console.log("BuildQuery", this.scope.cQuery);
+            if (this.scope.SelectedRegion != null) {
+                this.scope.cQuery.customerregion = this.scope.SelectedRegion.subjectCode.toString();
+                this._supliersService.MapRegion(this.scope.SelectedRegion);
+            }
+            this.scope.processedProgress = 0;
+            this.scope.progress = 0;
             this._supliersService.LoadSuplierFromQuyery(this.scope.cQuery);
         };
 
         DictionaryController.prototype.SetTotalResult = function (totalResult) {
             this.scope.totalResult = totalResult;
+        };
+
+        DictionaryController.prototype.UpdateProgress = function (currentItem) {
+            this.scope.processedProgress = currentItem;
+            this.scope.progress = (this.scope.processedProgress / this.scope.totalResult) * 100;
+            this.scope.$apply();
         };
 
         DictionaryController.prototype.TryToChozen = function () {
@@ -132,7 +138,7 @@
                     elem.chosen();
                     elem = $("#cznRegions");
                     elem.chosen();
-                }, 2000);
+                }, 1500);
             }
         };
         return DictionaryController;

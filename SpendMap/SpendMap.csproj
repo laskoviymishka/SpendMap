@@ -300,6 +300,7 @@
     <Content Include="Scripts\metro-core.js" />
     <Content Include="Scripts\metro-datepicker.js" />
     <Content Include="Scripts\semantic.js" />
+    <Content Include="Scripts\SmartTable.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

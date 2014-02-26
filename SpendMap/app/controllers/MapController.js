@@ -1,4 +1,4 @@
-﻿var Maps;
+var Maps;
 (function (Maps) {
     var MapScope = (function () {
         function MapScope() {
@@ -43,6 +43,9 @@
                     var marker = new google.maps.Marker();
                     marker.setPosition(results[0].geometry.location);
                     marker.setMap(this._map);
+                    marker.addListener(marker, "click", function () {
+                        console.log("asdasdasd");
+                    });
                     this._map.setCenter(results[0].geometry.location);
                 }.bind(this));
             }
@@ -55,10 +58,24 @@
             this.GeocodeAndDisplay(index);
         };
 
+        MapController.prototype.MapRegion = function (region) {
+            var geocodeRequest = {
+                address: region.name
+            };
+            console.log("geocodeRequest", geocodeRequest);
+            this._geocode.geocode(geocodeRequest, function (results, status) {
+                console.log("geocodeRequest response", results, status, region);
+                this._map.setCenter(results[0].geometry.location);
+            }.bind(this));
+        };
+
         MapController.prototype.GeocodeAndDisplay = function (index) {
             var _this = this;
             var suplier = this._supliers[index];
-            var map = this._map;
+            var timeOut = 100 + index * 50;
+            if (timeOut > 600) {
+                timeOut = 600;
+            }
             setTimeout(function () {
                 var geocodeRequest = {
                     address: suplier.factualAddres
@@ -77,7 +94,8 @@
                         marker.setPosition(results[0].geometry.location);
                     }
                 }.bind(_this));
-            }, 100 + index * 30);
+            }, timeOut);
+            this._supliersService.UpdateDisplayProgress(index);
         };
         return MapController;
     })();

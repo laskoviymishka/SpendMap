@@ -16,14 +16,11 @@
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     <script src="Scripts/choosen/chosen.jquery.min.js"></script>
-    <link href="Scripts/metro-bootstrap.css" rel="stylesheet" />
-    <script src="Scripts/metro-core.js"></script>
-    <script src="Scripts/metro-datepicker.js"></script>
-    <script src="Scripts/metro-calendar.js"></script>
     <script src="app/model/Query.js"></script>
     <script src="scripts/semantic.js"></script>
     <script src="Scripts/angular.js"></script>
     <script src="app/model/Contract.js"></script>
+    <script src="app/model/Product.js"></script>
     <script src="app/Services/SupliersService.js"></script>
     <script src="app/controllers/ContractsController.js"></script>
     <script src="app/model/Dictionary.js"></script>
@@ -135,8 +132,11 @@
             <select id="cznRegions" style="width:200px"
                     data-placeholder="Регион"
                     class="chzn-select"
-                    ng-model="SelectedRegions"
+                    ng-model="SelectedRegion"
                     ng-options="region.name for region in Regions"></select>
+        </div>
+        <div class="ui top attached progress" style="width: {{ progress }}%">
+            <div class="bar"></div>
         </div>
         <a class="item">
             <div class="ui icon input">
@@ -146,13 +146,43 @@
                 <i class="inverted purple search icon" ng-click="VM.BuildQuery()"></i>
             </div>
         </a>
+        <div class="ui bottom attached progress" style="width:{{ progress }}%">
+            <div class="bar"></div>
+        </div>
     </div>
     <div class="ui celled grid" style="height: 100%">
-        <div class="sixteen wide middle column" ng-controller="Maps.MapController" style="width: 100%; height: 100%">
+        <div class="eight wide middle column" ng-controller="Maps.MapController" style="width: 50%; height: 100%">
             <div class="ui left floated purple  launch button">
                 <i class="list layout icon"></i> Критерии
             </div>
             <div id="map" style="width: 100%; height: 95%"></div>
+        </div>
+        <div class="eight wide middle column" ng-controller="Contracts.ContractsController" style="width: 50%; height: 100%">
+            <div>
+                <div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div>
+                        <div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
