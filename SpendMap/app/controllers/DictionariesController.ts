@@ -53,6 +53,7 @@ module Dictionaries {
             this.LoadBudgetLevels();
             this.LoadPlacing();
             this.LoadRegions();
+            this.scope.cQuery = new Model.ContractQuery();
             this._supliersService = Services.SuplierService.getInstance($http);
             this._supliersService.SetDictionaries(this);
             this.scope.totalResult = 0;

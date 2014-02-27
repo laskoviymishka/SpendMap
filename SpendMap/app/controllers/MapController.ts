@@ -12,7 +12,7 @@ module Maps {
         private _geocode: google.maps.Geocoder;
         private _scope: MapScope;
         private _customers: Model.Customer[];
-        private _supliers: Model.Suplier[];
+        private _supliers: Model.SuplierData[];
         private _http: ng.IHttpService;
         private _supliersService: Services.SuplierService;
 
@@ -62,7 +62,7 @@ module Maps {
             }
         }
 
-        public DisplaySupliers(model: Model.Suplier[]): void {
+        public DisplaySupliers(model: Model.SuplierData[]): void {
             this._supliers = model;
             console.log("LoadSupliers success", this._supliers);
             var index = 0;

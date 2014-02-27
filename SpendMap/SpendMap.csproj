@@ -47,6 +47,8 @@
     <Content Include="Scripts\angular-touch.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\Avgrund.css" />
+    <Content Include="Scripts\Avgrund.js" />
     <Content Include="Scripts\choosen\chosen-sprite.png" />
     <Content Include="Scripts\choosen\chosen.css" />
     <Content Include="Scripts\choosen\chosen.jquery.min.js" />
@@ -295,12 +297,19 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
+    <Content Include="Scripts\jquery.dataTables.css" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.simplemodal.js" />
     <Content Include="Scripts\metro-bootstrap.css" />
     <Content Include="Scripts\metro-calendar.js" />
     <Content Include="Scripts\metro-core.js" />
     <Content Include="Scripts\metro-datepicker.js" />
+    <Content Include="Scripts\ng-table.min.css" />
+    <Content Include="Scripts\ng-table.min.js" />
     <Content Include="Scripts\semantic.js" />
     <Content Include="Scripts\SmartTable.js" />
+    <Content Include="swf\copy_cvs_xls.swf" />
+    <Content Include="swf\copy_cvs_xls_pdf.swf" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

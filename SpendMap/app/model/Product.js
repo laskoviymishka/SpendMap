@@ -7,6 +7,12 @@ var Model;
     })();
     Model.Product = Product;
 
+    var ProductData = (function () {
+        function ProductData() {
+        }
+        return ProductData;
+    })();
+    Model.ProductData = ProductData;
     var OKDP = (function () {
         function OKDP() {
         }

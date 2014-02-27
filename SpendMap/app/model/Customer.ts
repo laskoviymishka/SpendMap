@@ -31,7 +31,7 @@ module Model {
         public register: boolean;
         public OKPO: string;
         public headAgency: Agency;
-        public regNumber: number;
+        public regNum: number;
         public budgets: Budget[];
         public timeZone: number;
     }

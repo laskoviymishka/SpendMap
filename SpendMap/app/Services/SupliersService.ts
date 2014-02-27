@@ -95,6 +95,8 @@ module Services {
 
         private BuildQuery(query: Model.ContractQuery) {
             this.query = "?perpage=100";
+            this.query += "&perpage=100";
+
             if (query.productsearch != undefined || query.productsearch == "") {
                 this.query += "&productsearch=" + query.productsearch;
             }

@@ -80,6 +80,8 @@ var Services;
 
         SuplierService.prototype.BuildQuery = function (query) {
             this.query = "?perpage=100";
+            this.query += "&perpage=100";
+
             if (query.productsearch != undefined || query.productsearch == "") {
                 this.query += "&productsearch=" + query.productsearch;
             }
