@@ -149,7 +149,7 @@ module Services {
                         this._supliers.push(item);
                     }
                 }
-                if (data.contracts.total > data.contracts.perpage * data.contracts.page || page < 4) {
+                if (data.contracts.total > data.contracts.perpage * data.contracts.page && page < 2) {
                     this.ExecQuery(query, ++page);
                 } else {
                     this._map.DisplaySupliers(this._supliers);
