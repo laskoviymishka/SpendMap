@@ -32,7 +32,7 @@ declare module google.maps {
     /***** MVC *****/
     export class MVCObject {
         constructor();
-        addListener(marker: any, eventName: string, handler: (...args: any[]) => void): MapsEventListener;
+        addListener(eventName: string, handler: (...args: any[]) => void): MapsEventListener;
         bindTo(key: string, target: MVCObject, targetKey?: string, noNotify?: boolean): void;
         changed(key: string): void;
         get(key: string): any;

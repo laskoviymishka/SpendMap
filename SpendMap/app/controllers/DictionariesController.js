@@ -31,6 +31,7 @@ var Dictionaries;
             this._supliersService.SetDictionaries(this);
             this.scope.totalResult = 0;
             this.scope.progress = 0;
+            this.scope.dimmerClass = "ui dimmer";
         }
         DictionaryController.prototype.LoadOpfm = function () {
             var reguest = this.httpService.get(this.opfmUri, this.header);
@@ -107,10 +108,17 @@ var Dictionaries;
         };
 
         DictionaryController.prototype.BuildQuery = function () {
+            this.scope.dimmerClass = "ui active dimmer";
             console.log("BuildQuery", this.scope.cQuery);
             if (this.scope.SelectedRegion != null) {
                 this.scope.cQuery.customerregion = this.scope.SelectedRegion.subjectCode.toString();
                 this._supliersService.MapRegion(this.scope.SelectedRegion);
+            }
+            if (this.scope.SelectedBudgetLevels != null) {
+                this.scope.cQuery.budgetlevel = this.scope.SelectedBudgetLevels.budgetLevelCode.toString();
+            }
+            if (this.scope.SelectedPlacings != null) {
+                this.scope.cQuery.placing = this.scope.SelectedPlacings.description.toString();
             }
             this.scope.processedProgress = 0;
             this.scope.progress = 0;
@@ -122,6 +130,7 @@ var Dictionaries;
         };
 
         DictionaryController.prototype.UpdateProgress = function (currentItem) {
+            this.scope.dimmerClass = "ui dimmer";
             this.scope.processedProgress = currentItem;
             this.scope.progress = (this.scope.processedProgress / this.scope.totalResult) * 100;
             this.scope.$apply();

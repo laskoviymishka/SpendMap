@@ -12,7 +12,7 @@ module Maps {
         private _geocode: google.maps.Geocoder;
         private _scope: MapScope;
         private _customers: Model.Customer[];
-        private _supliers: Model.SuplierData[];
+        private _supliers: any[];
         private _http: ng.IHttpService;
         private _supliersService: Services.SuplierService;
 
@@ -56,7 +56,6 @@ module Maps {
                         var marker = new google.maps.Marker();
                         marker.setPosition(results[0].geometry.location);
                         marker.setMap(this._map);
-                        marker.addListener(marker, "click", () => { console.log("asdasdasd") });
                         this._map.setCenter(results[0].geometry.location);
                     }.bind(this));
             }
@@ -84,6 +83,7 @@ module Maps {
 
         private GeocodeAndDisplay(index: number) {
             var suplier = this._supliers[index];
+            var service = this._supliersService;
             var timeOut = 100 + index * 50;
             if (timeOut > 600) {
                 timeOut = 600;
@@ -105,6 +105,13 @@ module Maps {
                         } else {
                             var marker = new google.maps.Marker();
                             marker.setMap(this._map);
+                            marker.addListener("click",
+                                () => {
+                                    console.log("marker", suplier);
+                                    var contract = new Model.Contract();
+                                    contract.regNum = suplier.regNum;
+                                    service.ShowContract(contract);
+                                });
                             marker.setPosition(results[0].geometry.location);
                         }
                     }.bind(this));

@@ -43,9 +43,6 @@ var Maps;
                     var marker = new google.maps.Marker();
                     marker.setPosition(results[0].geometry.location);
                     marker.setMap(this._map);
-                    marker.addListener(marker, "click", function () {
-                        console.log("asdasdasd");
-                    });
                     this._map.setCenter(results[0].geometry.location);
                 }.bind(this));
             }
@@ -72,6 +69,7 @@ var Maps;
         MapController.prototype.GeocodeAndDisplay = function (index) {
             var _this = this;
             var suplier = this._supliers[index];
+            var service = this._supliersService;
             var timeOut = 100 + index * 50;
             if (timeOut > 600) {
                 timeOut = 600;
@@ -91,6 +89,12 @@ var Maps;
                     } else {
                         var marker = new google.maps.Marker();
                         marker.setMap(this._map);
+                        marker.addListener("click", function () {
+                            console.log("marker", suplier);
+                            var contract = new Model.Contract();
+                            contract.regNum = suplier.regNum;
+                            service.ShowContract(contract);
+                        });
                         marker.setPosition(results[0].geometry.location);
                     }
                 }.bind(_this));

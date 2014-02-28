@@ -37,7 +37,7 @@ module Services {
             this._supliers = [];
             this._data = [];
             this.baseUri = "https://clearspending.p.mashape.com";
-            this.method = "/v1/contracts/search/";
+            this.method = "/v1/contracts/select/";
             this.query = "?customerregion=23&returnfields=suppliers";
             this.supliersUri = this.baseUri + this.method + this.query;
         }
@@ -93,9 +93,12 @@ module Services {
             this._map.MapRegion(region);
         }
 
+        public ShowContract(contract: Model.Contract) {
+            this._grid.ShowContract(contract, false);
+        }
+
         private BuildQuery(query: Model.ContractQuery) {
             this.query = "?perpage=100";
-            this.query += "&perpage=100";
 
             if (query.productsearch != undefined || query.productsearch == "") {
                 this.query += "&productsearch=" + query.productsearch;
@@ -124,10 +127,6 @@ module Services {
             if (query.regnum != undefined || query.regnum == "") {
                 this.query += "&regnum=" + query.regnum;
             }
-
-            if (query.customerregion != undefined || query.customerregion == "") {
-                this.query += "&customerregion=" + query.customerregion;
-            }
         }
 
         private ExecQuery(query: string, page: number) {
@@ -143,11 +142,14 @@ module Services {
                 for (var i = 0; i < data.contracts.data.length; i++) {
                     if (data.contracts.data[i].suppliers != null) {
                         this._data.push(data.contracts.data[i]);
-                        var item = { factualAddres: data.contracts.data[i].suppliers.supplier.factualAddress };
+                        var item = {
+                            factualAddres: data.contracts.data[i].suppliers.supplier.factualAddress,
+                            regNum: data.contracts.data[i].regNum
+                        };
                         this._supliers.push(item);
                     }
                 }
-                if (data.contracts.total > data.contracts.perpage * data.contracts.page) {
+                if (data.contracts.total > data.contracts.perpage * data.contracts.page || page < 4) {
                     this.ExecQuery(query, ++page);
                 } else {
                     this._map.DisplaySupliers(this._supliers);

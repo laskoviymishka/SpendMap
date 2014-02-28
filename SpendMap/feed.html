@@ -33,9 +33,39 @@
     <script src="Scripts/TableTools.min.js"></script>
     <link rel="stylesheet" type="text/css" href="feed.css">
     <script src="feed.js"></script>
+    <link href="Scripts/angular-table.css" rel="stylesheet" />
+    <script src="Scripts/angular-table.js"></script>
+    <link href="Scripts/fooTable/footable.metro.css" rel="stylesheet" />
+    <script src="Scripts/fooTable/footable.js"></script>
+    <script src="Scripts/fooTable/footable.sort.js"></script>
+    <script src="Scripts/fooTable/footable.paginate.js"></script>
+    <script>
+        $(window).load(function (parameters) {
+            OnMapClick();
+            $('table').trigger('footable_initialize');
+        });
+        function OnMapClick() {
+            $("#mapContainer").show();
+            $("#tableContainer").hide();
+            $("#mapButton").addClass("positive");
+            $("#tableButton").removeClass("positive");
+        }
+        function OnTableClick() {
+            $("#mapContainer").hide();
+            $("#tableContainer").show();
+            $("#mapButton").removeClass("positive");
+            $("#tableButton").addClass("positive");
+        }
+    </script>
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
 </head>
 <body id="feed">
-    <div class="ui large teal vertical sidebar menu" ng-controller="Dictionaries.DictionaryController">
+    <div class="ui large teal vertical sidebar menu segment" ng-controller="Dictionaries.DictionaryController">
+        <div ng-class="dimmerClass"><div class="ui large text loader">Обрабатываю запрос</div></div>
         <a class="active item">
             Найдено контрактов <span class="ui label">{{totalResult}}</span>
         </a>
@@ -138,9 +168,6 @@
                     ng-model="SelectedRegion"
                     ng-options="region.name for region in Regions"></select>
         </div>
-        <div class="ui top attached progress" style="width: {{ progress }}%">
-            <div class="bar"></div>
-        </div>
         <a class="item">
             <div class="ui icon input">
                 <input type="text"
@@ -149,94 +176,500 @@
                 <i class="inverted purple search icon" ng-click="VM.BuildQuery()"></i>
             </div>
         </a>
-        <div class="ui bottom attached progress" style="width:{{ progress }}%">
-            <div class="bar"></div>
+        <div class="ui successful progress">
+            <div class="bar" style="width:{{progress}}%"></div>
         </div>
     </div>
-    <div class="ui celled grid" style="height: 100%">
-        <div class="row">
-            <div class="one wide middle column" ng-controller="Maps.MapController" style="width: 50%; height: 100%">
-                <div class="ui left floated purple  launch button">
-                    <i class="list layout icon"></i> Критерии
-                </div>
-                <div id="map" style="width: 100%; height: 95%"></div>
+    <div class="ui left floated purple  launch button">
+        <i class="list layout icon"></i> Критерии
+    </div>
+    <div class="ui buttons">
+        <div id="mapButton" class="ui positive button" onclick="OnMapClick()">Карта</div>
+        <div class="or"></div>
+        <div id="tableButton" class="ui  button" onclick="OnTableClick()">Таблица</div>
+    </div>
+    <div class="ui celled grid" style="width: 100%; height: 95%">
+        <div id="mapContainer" class="row" style="width: 100%; height: 100%">
+            <div class="one wide middle column" ng-controller="Maps.MapController" style="width: 100%; height: 100%; padding: 0px;">
+                <div id="map" style="width: 100%; height: 100%"></div>
             </div>
-            <div class="fifteen wide left column" ng-controller="Contracts.ContractsController" style="width: 50%; height: 100%">
-                <table id="table" class="ui table segment" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th style="width: 35%">
-                                Покупатель
-                            </th>
-                            <th style="width: 15%">
-                                Дата
-                            </th>
-                            <th style="width: 10%">
-                                Цена
-                            </th>
-                            <th style="width: 30%">
-                                Поставщик
-                            </th>
-                            <th style="width: 10%">
-                                Товары
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="contract in contracts">
-                            <td style="width: 35%">
-                                <div class="ui left floated small button" ng-click="VM.ShowCustomer(contract.customer)">{{contract.customer.fullName}}</div>
-                            </td>
-                            <td style="width: 15%">
-                                <div class="ui label">{{contract.signDate | date:'yyyy-MM-dd'}}</div>
-                            </td>
-                            <td style="width: 10%">
-                                <div class="ui label">{{contract.price}} рублей</div>
-                            </td>
-                            <td style="width: 30%">
-                                <div class="ui left floated small button" ng-click="VM.ShowSupplier(contract.suppliers.supplier)">{{contract.suppliers.supplier.organizationName}}</div>
-                            </td>
-                            <td style="width: 10%">
-                                <div class="ui left floated small button" ng-click="VM.ShowContract(contract)">{{contract.products.product.length}}</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="5">
-                            </th>
-                        </tr>
-                    </tfoot>
-                </table>
-                
-                <div id="customerModal" class="ui modal">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        {{selectedCustomer}}
-                    </div>
-                    <div class="content">
-                    </div>
-                    <button onclick="javascript:closeDialog();">Close</button>
+        </div>
+        <div class="row" ng-controller="Contracts.ContractsController">
+            <div class="fifteen wide left column" style="width: 100%; padding: 0px;">
+                <div id="tableContainer">
+                    <table id="table" class="segment" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th style="width: 35%">
+                                    Покупатель
+                                </th>
+                                <th style="width: 15%">
+                                    Дата
+                                </th>
+                                <th style="width: 10%" data-sort-initial="true">
+                                    Цена
+                                </th>
+                                <th style="width: 30%">
+                                    Поставщик
+                                </th>
+                                <th style="width: 10%">
+                                    Контракт
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contract in contracts">
+                                <td style="width: 35%">
+                                    <div style="width: 100%" class="ui left floated small button" ng-click="VM.ShowCustomer(contract.customer)">{{contract.customer.fullName}}</div>
+                                </td>
+                                <td style="width: 15%">
+                                    <div style="width: 100%" class="ui label">{{contract.signDate | date:'yyyy-MM-dd'}}</div>
+                                </td>
+                                <td style="width: 10%">
+                                    <div style="width: 100%" class="ui label">{{contract.price | number:0}} рублей</div>
+                                </td>
+                                <td style="width: 30%">
+                                    <div style="width: 100%" class="ui left floated small button" ng-click="VM.ShowSupplier(contract.suppliers.supplier)">{{contract.suppliers.supplier.organizationName}}</div>
+                                </td>
+                                <td style="width: 10%">
+                                    <div style="width: 100%" class="ui left floated small button" ng-click="VM.ShowContract(contract)">Подробнее (товаров: {{contract.products.product.length}})</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <div class="pagination pagination-centered hide-if-no-paging"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
+            </div>
 
-                <div id="supplierModal" class="ui modal">
-                    <i class="close icon"></i>
-                    <div class="header">
+            <div id="customerModal" class="ui modal" style="max-width: 800px; max-height: 600px; overflow: scroll; ">
+                <i class="close icon"></i>
+                <div class="content">
+                    <div ng-class="couldBack" ng-click="VM.ShowContract(selectedContract,true)">
+                        <i class="icon left arrow  "></i>
                     </div>
-                    <div class="content">
-                        {{selectedSupplier}}
-                        
-                    </div>
+                    <table class="ui table segment">
+                        <thead>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="center">{{selectedCustomer.shortName}}</div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="header">fullName</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.fullName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">fax</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.fax}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">addressLine</div>
+
+                                </td>
+                                <td>
+                                    {{selectedCustomer.factualAddress.addressLine}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">region</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.region.fullName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">email</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.email}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">phone</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.phone}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">orderingAgency</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.orderingAgency.fullName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">headAgency</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.headAgency.fullName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">subordinationType</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.subordinationType.description}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">organizationType</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.organizationType.name}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">okogu</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.okogu.name}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">okopf</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.okopf.fullName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">contactPerson</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.contactPerson.lastName}} {{selectedCustomer.contactPerson.firstName}} {{selectedCustomer.contactPerson.middleName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">budget</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.budgets.budget.name}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">contractsCount</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.contractsCount | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">contractsSum</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2010</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.contractsYearStats.2010.contractsCount | number:0}} - {{selectedCustomer.contractsYearStats.2010.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2011</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.contractsYearStats.2011.contractsCount | number:0}} - {{selectedCustomer.contractsYearStats.2011.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2012</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.contractsYearStats.2012.contractsCount | number:0}} - {{selectedCustomer.contractsYearStats.2012.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2013</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.contractsYearStats.2013.contractsCount | number:0}} - {{selectedCustomer.contractsYearStats.2013.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2014</div>
+                                </td>
+                                <td>
+                                    {{selectedCustomer.contractsYearStats.2014.contractsCount | number:0}} - {{selectedCustomer.contractsYearStats.2014.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">
+                                    <a class="center label ui" href="{{selectedCustomer.url}}">{{selectedCustomer.url}}</a>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
-                
-                <div id="contractModal" class="ui modal">
-                    <i class="close icon"></i>
-                    <div class="header">
+            </div>
+            <div id="supplierModal" class="ui modal" style="max-width: 800px; max-height: 600px; overflow: scroll; ">
+                <i class="close icon"></i>
+                <div class="content">
+                    <div ng-class="couldBack" ng-click="VM.ShowContract(selectedContract,true)">
+                        <i class="icon left arrow  "></i>
                     </div>
-                    <div class="content">
-                        {{selectedContract}}
-                        
-                    </div>
+                    <table class="ui table segment">
+                        <thead>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="center">{{selectedSupplier.organizationForm}} {{selectedSupplier.organizationName}}</div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="header">factualAddress</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.factualAddress}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">contactPhone</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.contactPhone}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">postAddress</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.postAddress}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">country</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.country.countryFullName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">contractsCount</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.contractsCount | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">contractsSum</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2010</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.contractsYearStats.2010.contractsCount | number:0}} - {{selectedSupplier.contractsYearStats.2010.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2011</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.contractsYearStats.2011.contractsCount | number:0}} - {{selectedSupplier.contractsYearStats.2011.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2012</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.contractsYearStats.2012.contractsCount | number:0}} - {{selectedSupplier.contractsYearStats.2012.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2013</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.contractsYearStats.2013.contractsCount | number:0}} - {{selectedSupplier.contractsYearStats.2013.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">2014</div>
+                                </td>
+                                <td>
+                                    {{selectedSupplier.contractsYearStats.2014.contractsCount | number:0}} - {{selectedSupplier.contractsYearStats.2014.contractsSum | number:0}}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div id="contractModal" class="ui modal" style=" max-width: 800px; max-height: 600px; overflow: scroll">
+                <i class="close icon"></i>
+                <div class="content">
+                    <table class="ui table segment">
+                        <thead>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="center">{{selectedContract.documentBase}}</div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="header">protocolDate</div>
+                                </td>
+                                <td>
+                                    {{selectedContract.protocolDate}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">modification</div>
+                                </td>
+                                <td>
+                                    {{selectedContract.modification.description}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">budgetLevel</div>
+                                </td>
+                                <td>
+                                    {{selectedContract.finances.budgetLevel.name}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">financeSource</div>
+                                </td>
+                                <td>
+                                    {{selectedContract.finances.financeSource}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">budgetary</div>
+                                </td>
+                                <td>
+                                    {{selectedContract.budgetary.comment}}
+                                    <br />
+                                    price - {{selectedContract.budgetary.price | number:0}}
+                                    month - {{selectedContract.budgetary.month}}
+                                    year - {{selectedContract.budgetary.year}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">price</div>
+                                </td>
+                                <td>
+                                    {{selectedContract.price | number:0}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">customer</div>
+                                </td>
+                                <td>
+                                    <div style="width: 100%" class="ui left floated small button" ng-click="VM.ShowCustomer(selectedContract.customer, true)">{{selectedContract.customer.fullName}}</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="header">suppliers</div>
+                                </td>
+                                <td>
+                                    <div style="width: 100%" class="ui left floated small button" ng-click="VM.ShowSupplier(selectedContract.suppliers.supplier, true)">{{selectedContract.suppliers.supplier.organizationName}}</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <table class="ui table segment">
+                                        <thead>
+                                            <tr>
+                                                <th>name</th>
+                                                <th>OKEI</th>
+                                                <th>OKDP</th>
+                                                <th>quantity</th>
+                                                <th>price</th>
+                                                <th>sum</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="product in selectedContract.products.product">
+                                                <td>{{product.name}}</td>
+                                                <td>{{product.OKEI.name}}</td>
+                                                <td>{{product.OKDP.name}}</td>
+                                                <td>{{product.quantity | number:0}}</td>
+                                                <td>{{product.price | number:0}}</td>
+                                                <td>{{product.sum | number:0}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">
+
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>

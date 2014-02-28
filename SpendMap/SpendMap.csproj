@@ -43,6 +43,8 @@
     <Content Include="Scripts\angular-sanitize.js" />
     <Content Include="Scripts\angular-sanitize.min.js" />
     <Content Include="Scripts\angular-scenario.js" />
+    <Content Include="Scripts\angular-table.css" />
+    <Content Include="Scripts\angular-table.js" />
     <Content Include="Scripts\angular-touch.js" />
     <Content Include="Scripts\angular-touch.min.js" />
     <Content Include="Scripts\angular.js" />
@@ -52,6 +54,19 @@
     <Content Include="Scripts\choosen\chosen-sprite.png" />
     <Content Include="Scripts\choosen\chosen.css" />
     <Content Include="Scripts\choosen\chosen.jquery.min.js" />
+    <Content Include="Scripts\fooTable\fonts\footable.svg" />
+    <Content Include="Scripts\fooTable\footable.core.css" />
+    <Content Include="Scripts\fooTable\footable.core.min.css" />
+    <Content Include="Scripts\fooTable\footable.filter.js" />
+    <Content Include="Scripts\fooTable\footable.js" />
+    <Content Include="Scripts\fooTable\footable.metro.css" />
+    <Content Include="Scripts\fooTable\footable.metro.min.css" />
+    <Content Include="Scripts\fooTable\footable.paginate.js" />
+    <Content Include="Scripts\fooTable\footable.plugin.template.js" />
+    <Content Include="Scripts\fooTable\footable.sort.js" />
+    <Content Include="Scripts\fooTable\footable.standalone.css" />
+    <Content Include="Scripts\fooTable\footable.standalone.min.css" />
+    <Content Include="Scripts\fooTable\footable.striping.js" />
     <Content Include="Scripts\i18n\angular-locale_af-na.js" />
     <Content Include="Scripts\i18n\angular-locale_af-za.js" />
     <Content Include="Scripts\i18n\angular-locale_af.js" />
@@ -308,8 +323,8 @@
     <Content Include="Scripts\ng-table.min.js" />
     <Content Include="Scripts\semantic.js" />
     <Content Include="Scripts\SmartTable.js" />
-    <Content Include="swf\copy_cvs_xls.swf" />
-    <Content Include="swf\copy_cvs_xls_pdf.swf" />
+    <Content Include="swf\copy_csv_xls.swf" />
+    <Content Include="swf\copy_csv_xls_pdf.swf" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -357,6 +372,9 @@
     <Content Include="fonts\icons.otf" />
     <Content Include="fonts\icons.ttf" />
     <Content Include="fonts\icons.woff" />
+    <Content Include="Scripts\fooTable\fonts\footable.eot" />
+    <Content Include="Scripts\fooTable\fonts\footable.ttf" />
+    <Content Include="Scripts\fooTable\fonts\footable.woff" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

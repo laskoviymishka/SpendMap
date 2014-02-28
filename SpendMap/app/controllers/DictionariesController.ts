@@ -10,8 +10,10 @@ module Dictionaries {
         Regions: Region[];
         Placings: Placing[];
         BudgetLevels: BudgetLevel[];
-        SelectedBudgetLevels: BudgetLevel[];
+        SelectedBudgetLevels: BudgetLevel;
         SelectedRegion: Dictionaries.Region;
+        SelectedPlacings: Dictionaries.Placing;
+        dimmerClass: string;
     }
 
     export class DictionaryController {
@@ -58,6 +60,8 @@ module Dictionaries {
             this._supliersService.SetDictionaries(this);
             this.scope.totalResult = 0;
             this.scope.progress = 0;
+            this.scope.dimmerClass = "ui dimmer";
+
         }
 
         public LoadOpfm() {
@@ -138,10 +142,17 @@ module Dictionaries {
         }
 
         public BuildQuery() {
+            this.scope.dimmerClass = "ui active dimmer";
             console.log("BuildQuery", this.scope.cQuery);
             if (this.scope.SelectedRegion != null) {
                 this.scope.cQuery.customerregion = this.scope.SelectedRegion.subjectCode.toString();
                 this._supliersService.MapRegion(this.scope.SelectedRegion);
+            }
+            if (this.scope.SelectedBudgetLevels != null) {
+                this.scope.cQuery.budgetlevel = this.scope.SelectedBudgetLevels.budgetLevelCode.toString();
+            }
+            if (this.scope.SelectedPlacings != null) {
+                this.scope.cQuery.placing = this.scope.SelectedPlacings.description.toString();
             }
             this.scope.processedProgress = 0;
             this.scope.progress = 0;
@@ -153,6 +164,7 @@ module Dictionaries {
         }
 
         public UpdateProgress(currentItem: number) {
+            this.scope.dimmerClass = "ui dimmer";
             this.scope.processedProgress = currentItem;
             this.scope.progress = (this.scope.processedProgress / this.scope.totalResult) * 100;
             this.scope.$apply();
