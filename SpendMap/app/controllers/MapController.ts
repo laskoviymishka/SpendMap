@@ -76,7 +76,6 @@ module Maps {
             this._geocode.geocode(
                 geocodeRequest,
                 function (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) {
-                    console.log("geocodeRequest response", results, status, region);
                     this._map.setCenter(results[0].geometry.location);
                 }.bind(this));
         }
@@ -95,7 +94,6 @@ module Maps {
                 this._geocode.geocode(
                     geocodeRequest,
                     function (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) {
-                        console.log("LoadSupliers success", results, status);
                         if (index <= this._supliers.length) {
                             this.GeocodeAndDisplay(index + 1);
                         }

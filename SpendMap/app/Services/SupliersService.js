@@ -16,7 +16,7 @@ var Services;
             this._supliers = [];
             this._data = [];
             this.baseUri = "https://clearspending.p.mashape.com";
-            this.method = "/v1/contracts/select/";
+            this.method = "/v1/contracts/search/";
             this.query = "?customerregion=23&returnfields=suppliers";
             this.supliersUri = this.baseUri + this.method + this.query;
         }
@@ -33,6 +33,10 @@ var Services;
 
         SuplierService.prototype.SetGrid = function (grid) {
             this._grid = grid;
+        };
+
+        SuplierService.prototype.SetChart = function (chart) {
+            this._chart = chart;
         };
 
         SuplierService.prototype.SetDictionaries = function (dictionaries) {
@@ -139,6 +143,7 @@ var Services;
                 } else {
                     this._map.DisplaySupliers(this._supliers);
                     this._grid.DisplayGrid(this._data);
+                    this._chart.PushContractData(this._data);
                 }
             }.bind(this));
         };

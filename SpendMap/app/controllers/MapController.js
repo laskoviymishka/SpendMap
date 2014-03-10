@@ -61,7 +61,6 @@ var Maps;
             };
             console.log("geocodeRequest", geocodeRequest);
             this._geocode.geocode(geocodeRequest, function (results, status) {
-                console.log("geocodeRequest response", results, status, region);
                 this._map.setCenter(results[0].geometry.location);
             }.bind(this));
         };
@@ -79,7 +78,6 @@ var Maps;
                     address: suplier.factualAddres
                 };
                 _this._geocode.geocode(geocodeRequest, function (results, status) {
-                    console.log("LoadSupliers success", results, status);
                     if (index <= this._supliers.length) {
                         this.GeocodeAndDisplay(index + 1);
                     }

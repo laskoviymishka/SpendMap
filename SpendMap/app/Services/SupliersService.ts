@@ -13,6 +13,7 @@ module Services {
         private query: string;
         private method: string;
         private _data: Model.Contract[];
+        private _chart: Contracts.ChartsController;
 
 
         public static getInstance(http: ng.IHttpService): SuplierService {
@@ -37,7 +38,7 @@ module Services {
             this._supliers = [];
             this._data = [];
             this.baseUri = "https://clearspending.p.mashape.com";
-            this.method = "/v1/contracts/select/";
+            this.method = "/v1/contracts/search/";
             this.query = "?customerregion=23&returnfields=suppliers";
             this.supliersUri = this.baseUri + this.method + this.query;
         }
@@ -48,6 +49,10 @@ module Services {
 
         public SetGrid(grid: Contracts.ContractsController) {
             this._grid = grid;
+        }
+
+        public SetChart(chart: Contracts.ChartsController) {
+            this._chart = chart;
         }
 
         public SetDictionaries(dictionaries: Dictionaries.DictionaryController) {
@@ -154,6 +159,7 @@ module Services {
                 } else {
                     this._map.DisplaySupliers(this._supliers);
                     this._grid.DisplayGrid(this._data);
+                    this._chart.PushContractData(this._data);
                 }
             }.bind(this));
         }
