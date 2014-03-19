@@ -1,0 +1,6 @@
+c:\users\andrei_tserakhau\documents\visual studio 2013\Projects\SpendMap\SpendMap\obj\Debug\SpendMap.csprojResolveAssemblyReference.cache
+c:\users\andrei_tserakhau\documents\visual studio 2013\Projects\SpendMap\SpendMap\bin\SpendMap.dll.config
+c:\users\andrei_tserakhau\documents\visual studio 2013\Projects\SpendMap\SpendMap\bin\SpendMap.dll
+c:\users\andrei_tserakhau\documents\visual studio 2013\Projects\SpendMap\SpendMap\bin\SpendMap.pdb
+c:\users\andrei_tserakhau\documents\visual studio 2013\Projects\SpendMap\SpendMap\obj\Debug\SpendMap.dll
+c:\users\andrei_tserakhau\documents\visual studio 2013\Projects\SpendMap\SpendMap\obj\Debug\SpendMap.pdb
