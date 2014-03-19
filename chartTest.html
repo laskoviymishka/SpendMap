@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html ng-app>
+<head>
+    <script src="Scripts/jquery-1.9.1.min.js"></script>
+    <script src="Scripts/globalize/globalize.js"></script>
+    <script src="Scripts/dx.chartjs.js"></script>
+    <script src="Scripts/angular.js"></script>
+    <script src="app/model/Contract.js"></script>
+    <script src="app/model/Product.js"></script>
+    <script src="app/Services/SupliersService.js"></script>
+    <script src="app/controllers/ContractsController.js"></script>
+    <script src="app/model/Dictionary.js"></script>
+    <script src="app/controllers/DictionariesController.js"></script>
+    <script src="app/model/AdditionalTypes.js"></script>
+    <script src="app/model/Customer.js"></script>
+    <script src="app/controllers/MapController.js"></script>
+    <script src="app/controllers/ChartsController.js"></script>
+    <title></title>
+</head>
+<body>
+    <div ng-controller="Contracts.ChartsController">
+        <input type="button" ng-click="VM.ShowChart()" value="click" />
+        <div id="chart" style="width: 500px; height: 500px"></div>
+    </div>
+</body>
+</html>
